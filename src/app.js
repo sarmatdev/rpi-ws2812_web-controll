@@ -1,30 +1,41 @@
-// const ws281x = require('rpi-ws281x-native')
+const ws281x = require('rpi-ws281x-native');
 const express = require('express');
 const path = require('path');
-const members = require('./Members');
-const logger = require('./middleware/logger');
 
 const app = express();
 
-// Init middleware
-app.use(logger);
-
-// Getts all members
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('/api/members', (req, res) => {
-  res.json(members);
-});
+app.get('/rainbow', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/rainbow.html'));
+  var NUM_LEDS = 8,
+    pixelData = new Uint32Array(NUM_LEDS);
 
-app.get('/api/members/:id', (req, res) => {
-  const found = members.some(member => member.id === parseInt(req.params.id));
-  console.log(found);
+  ws281x.init(NUM_LEDS);
 
-  if (found) {
-    res.json(members.filter(member => member.id === parseInt(req.params.id)));
-  } else {
-    res.status(400).json({msg: 'Member not found💁🏻‍♂️'});
-  }
+  // ---- trap the SIGINT and reset before exit
+  process.on('SIGINT', function() {
+    ws281x.reset();
+    process.nextTick(function() {
+      process.exit(0);
+    });
+  });
+
+  // ---- animation-loop
+  var offset = 0;
+  setInterval(function() {
+    var i = NUM_LEDS;
+    while (i--) {
+      pixelData[i] = 0;
+    }
+    pixelData[offset] = 0xe600ff;
+
+    offset = (offset + 1) % NUM_LEDS;
+    ws281x.setBrightness(20);
+    ws281x.render(pixelData);
+  }, 100);
+
+  console.log('Press <ctrl>+C to exit.');
 });
 
 app.listen(8000, () => console.log('Server Started!'));
