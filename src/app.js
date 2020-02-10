@@ -8,8 +8,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/rainbow', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/rainbow.html'));
-  var NUM_LEDS = 8,
-    pixelData = new Uint32Array(NUM_LEDS);
+  const NUM_LEDS = 8
+    const pixelData = new Uint32Array(NUM_LEDS);
 
   ws281x.init(NUM_LEDS);
 
@@ -21,19 +21,14 @@ app.get('/rainbow', (req, res) => {
     });
   });
 
-  // ---- animation-loop
-  var offset = 0;
-  setInterval(function() {
-    var i = NUM_LEDS;
-    while (i--) {
-      pixelData[i] = 0;
-    }
-    pixelData[offset] = 0xe600ff;
+  for (var i = 0; i < NUM_LEDS; i++) {
+    pixelData[i] = 0x0051ff;
+  }
+  ws281x.render(pixelData);
+  console.log(pixelData)
 
-    offset = (offset + 1) % NUM_LEDS;
-    ws281x.setBrightness(20);
-    ws281x.render(pixelData);
-  }, 100);
+  // ---- animation-loop
+  ws281x.setBrightness(10);
 
   console.log('Press <ctrl>+C to exit.');
 });
