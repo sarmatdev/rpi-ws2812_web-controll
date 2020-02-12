@@ -1,1 +1,1 @@
-# Web App controller for your ws281x led's via Raspberry Pi
+# Full Stack Vue/Node/Socket.io App for controlling ws281x leds via Raspberry Pi
