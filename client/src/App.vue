@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="primary">
-      <Controller @:effect="setEffect($event)" />
+      <Controller v-on:effect="setEffect($event)" />
     </v-app-bar>
 
     <v-container>
@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     setEffect(type) {
+      console.log(type)
       this.socket.emit('effect', type);
     }
   }
