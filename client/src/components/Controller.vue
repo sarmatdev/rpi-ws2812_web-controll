@@ -1,27 +1,26 @@
 <template>
-  <div>
-    <button @click="effect('plain')">Plain Color</button>
-    <button @click="effect('rainbow')">Rainbow</button>
-    <button @click="effect('iterate')">Iterate</button>
-    <button @click="effect('sandbox')">Sanbox</button>
-  </div>
+  <v-container fluid>
+    <v-row>
+      <v-col cols="12">
+        <v-row justify="space-around" aligin="center">
+          <v-btn dark @click="effect('plain')">Plain Color</v-btn>
+          <v-btn dark @click="effect('rainbow')">Rainbow</v-btn>
+          <v-btn dark @click="effect('iterate')">Iterate</v-btn>
+          <v-btn dark @click="effect('sandbox')">Sanbox</v-btn>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import io from 'socket.io-client';
-
 export default {
   data() {
-    return {
-      socket: {}
-    };
-  },
-  created() {
-    this.socket = io('http://192.168.1.107:8000');
+    return {};
   },
   methods: {
     effect(type) {
-      this.socket.emit('effect', type);
+      this.$emit('effect', type);
     }
   }
 };
