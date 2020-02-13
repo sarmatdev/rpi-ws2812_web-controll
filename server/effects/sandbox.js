@@ -31,8 +31,6 @@ function plain() {
 
     // console.log(t0, dt, Math.floor(Math.sin(dt / 1000) * 128 + 128));
   }, 10);
-
-  console.log('Press <ctrl>+C to exit.');
 }
 
 module.exports = plain;

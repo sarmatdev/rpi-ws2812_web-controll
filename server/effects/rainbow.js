@@ -6,7 +6,6 @@ function rainbow() {
 
   ws281x.init(NUM_LEDS);
 
-
   process.on('SIGINT', function() {
     ws281x.reset();
   });
