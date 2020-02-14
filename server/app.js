@@ -1,6 +1,6 @@
 const express = require('express');
 const socketio = require('socket.io');
-
+require('events').EventEmitter.defaultMaxListeners = 3;
 // Effects
 const plain = require('./effects/plain');
 const rainbow = require('./effects/rainbow');
@@ -12,25 +12,9 @@ const app = express();
 const expressServer = app.listen(8000, () => console.log('Server Started!'));
 const io = socketio(expressServer);
 
+let effect = null;
 io.on('connection', socket => {
   socket.on('effect', data => {
-    console.log(data)
-    switch (data.type) {
-      case 'plain':
-        plain(data.color.hex);
-        break;
-      case 'rainbow':
-        rainbow();
-        break;
-      case 'iterate':
-        iterate();
-        break;
-      case 'sandbox':
-        sandbox();
-        break;
-    }
+    effect = data;
   });
-  socket.on('color', data => {
-    // console.log(`From Server ${data}`)
-  })
 });

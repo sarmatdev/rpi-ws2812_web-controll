@@ -1,7 +1,7 @@
 <template>
-  <v-app>
+  <v-app v-on="passData">
     <v-app-bar app color="primary">
-      <Controller @effect="setEffect($event)" />
+      <Controller @effect="setType($event)" />
     </v-app-bar>
 
     <v-content>
@@ -9,9 +9,21 @@
         <!-- <Picker @color="setColor($event)" /> -->
         <v-color-picker
           hide-inputs
+          hide-canvas
           v-model="effect.color"
-          v-on="showColor"
         ></v-color-picker>
+        <v-slider
+          v-model="effect.brightness"
+          thumb-label="always"
+          min="0"
+          max="255"
+        ></v-slider>
+        <v-slider
+          v-model="effect.speed"
+          thumb-label="always"
+          min="1"
+          max="1000"
+        ></v-slider>
       </v-container>
     </v-content>
   </v-app>
@@ -32,31 +44,26 @@ export default {
   data() {
     return {
       socket: {},
-      color: {},
       effect: {
-        color: {}
+        type: '',
+        color: {},
+        brightness: null,
+        speed: ''
       }
     };
   },
   created() {
     this.socket = io('http://192.168.1.107:8000');
   },
+  mounted() {},
   methods: {
-    setEffect(type) {
+    setType(type) {
       this.effect.type = type;
-      this.socket.emit('effect', this.effect);
-    },
-    setColor() {
-      // this.socket.emit('color', color);
-      // this.socket.emit('color', this.color.hexa);
     }
-    // showColor() {
-    //   console.log(this.color.hexa);
-    // }
   },
   computed: {
-    showColor() {
-      return this.socket.emit('color', this.effect.color.hex);
+    passData() {
+      return this.socket.emit('effect', this.effect);
     }
   }
 };
