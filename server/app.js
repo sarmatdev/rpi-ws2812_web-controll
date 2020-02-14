@@ -14,9 +14,10 @@ const io = socketio(expressServer);
 
 io.on('connection', socket => {
   socket.on('effect', data => {
-    switch (data) {
+    console.log(data)
+    switch (data.type) {
       case 'plain':
-        plain();
+        plain(data.color.hex);
         break;
       case 'rainbow':
         rainbow();
@@ -29,4 +30,7 @@ io.on('connection', socket => {
         break;
     }
   });
+  socket.on('color', data => {
+    // console.log(`From Server ${data}`)
+  })
 });

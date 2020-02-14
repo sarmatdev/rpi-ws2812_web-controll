@@ -2,9 +2,12 @@
   <v-row>
     <v-col cols="12">
       <v-row justify="center" aligin="center">
-        <v-color-picker v-model="color"></v-color-picker>
+        <v-color-picker
+          mode="hexa"
+          v-model="color"
+          v-on="showColor()"
+        ></v-color-picker>
       </v-row>
-      {{ showColor() }}
     </v-col>
   </v-row>
 </template>
@@ -18,7 +21,8 @@ export default {
   },
   methods: {
     showColor() {
-      console.log(this.color.hex);
+      // this.$emit('color', this.color.hexa);
+      // return this.color.hexa;
     }
   }
 };
