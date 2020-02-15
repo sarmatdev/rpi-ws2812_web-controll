@@ -1,6 +1,6 @@
 const ws281x = require('rpi-ws281x-native');
 
-function rainbow() {
+function rainbow(speed) {
   const NUM_LEDS = 8;
   const pixelData = new Uint32Array(NUM_LEDS);
 
@@ -8,6 +8,9 @@ function rainbow() {
 
   process.on('SIGINT', function() {
     ws281x.reset();
+    process.nextTick(function() {
+      process.exit(0);
+    });
   });
 
   var offset = 0;
@@ -17,7 +20,7 @@ function rainbow() {
     }
     offset = (offset + 1) % 256;
     ws281x.render(pixelData);
-  }, 10);
+  }, speed);
 }
 
 function colorwheel(pos) {
