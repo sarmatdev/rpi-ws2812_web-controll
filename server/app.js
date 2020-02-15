@@ -29,11 +29,6 @@ io.on('connection', socket => {
 const NUM_LEDS = 8;
 const pixelData = new Uint32Array(NUM_LEDS);
 
-// var color = `0x${effect.color.slice(1, 8)}`
-
-
-
-
 ws281x.init(NUM_LEDS);
 
 // ---- trap the SIGINT and reset before exit
@@ -56,5 +51,4 @@ setInterval(function() {
   var dt = Date.now() - t0;
 
   ws281x.setBrightness(effect.brightness*1);
-  console.log('Press <ctrl>+C to exit.');
 })
