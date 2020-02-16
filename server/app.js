@@ -23,6 +23,7 @@ io.on('connection', socket => {
   socket.on('effect', data => {
     effect.color = data.color.hex;
     effect.brightness = data.brightness;
+    effect.speed = data.speed;
   });
 });
 
@@ -39,16 +40,22 @@ process.on('SIGINT', function() {
   });
 });
 
-for (var i = 0; i < NUM_LEDS; i++) {
-  pixelData[i] = 0xff00ff;
-}
+// for (var i = 0; i < NUM_LEDS; i++) {
+//   pixelData[i] = 0x0ff0f0;
+// }
 
-ws281x.render(pixelData);
+// ws281x.render(pixelData);
 
 // ---- animation-loop
 var t0 = Date.now();
 setInterval(function() {
   var dt = Date.now() - t0;
 
-  ws281x.setBrightness(effect.brightness*1);
-})
+  for (var i = 0; i < NUM_LEDS; i++) {
+    pixelData[i] = parseInt(`0x${effect.color.slice(1, effect.color.length)}`);
+    console.log(parseInt('0x'+effect.color.slice(1, effect.color.length)))
+  }
+  ws281x.render(pixelData);
+
+  ws281x.setBrightness(effect.brightness * 1);
+});
